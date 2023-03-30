@@ -1,15 +1,9 @@
 name: "CodeQL"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ !contains( github.ref , 'heads/ref/master') }}
-
 on:
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
+  workflow_dispatch:
   schedule:
-    - cron: '30 5,17 * * *'
+    - cron: '0 */6 * * *'
 
 permissions:
   contents: read
@@ -35,8 +29,7 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-        debug: false
-        config-file: ./.github/codeql/codeql-config.yml
+        queries: security-extended
 
     - name: Build JavaScript
       uses: github/codeql-action/autobuild@v2
